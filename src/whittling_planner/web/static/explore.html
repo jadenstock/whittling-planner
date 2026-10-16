@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Explore Designs</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>Whittling Planner</h1>
+      <nav class="tabs" aria-label="Pages">
+        <a href="/">Plan</a>
+        <a href="/explore" aria-current="page">Explore designs</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="explore">
+    <div class="filters">
+      <div class="control">
+        <span class="control-label">Block</span>
+        <div class="segmented small" id="f-block" role="radiogroup" aria-label="Block"></div>
+      </div>
+      <div class="control">
+        <span class="control-label">Style</span>
+        <div class="segmented small" id="f-style" role="radiogroup" aria-label="Style"></div>
+      </div>
+      <div class="control">
+        <span class="control-label">Level</span>
+        <div class="segmented small" id="f-level" role="radiogroup" aria-label="Level"></div>
+      </div>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </main>
+
+  <div class="drawer" id="drawer" hidden>
+    <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="d-name">
+      <div class="drawer-view">
+        <div id="preview"></div>
+        <button class="close" id="close" aria-label="Close">×</button>
+      </div>
+      <div class="drawer-info" id="drawer-info"></div>
+    </div>
+  </div>
+
+  <script type="module" src="/static/explore.js"></script>
+</body>
+</html>

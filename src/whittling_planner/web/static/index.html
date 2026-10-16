@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Whittling Planner</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <h1>Whittling Planner</h1>
+        <nav class="tabs" aria-label="Pages">
+          <a href="/" aria-current="page">Plan</a>
+          <a href="/explore" id="explore-link">Explore designs</a>
+        </nav>
+      </div>
+      <div class="controls">
+        <div class="control">
+          <span class="control-label">Block</span>
+          <div class="segmented" id="block-picker" role="radiogroup" aria-label="Block"></div>
+        </div>
+        <div class="control" id="custom-block" hidden>
+          <span class="control-label">Your block, inches</span>
+          <div class="blank-inputs">
+            <input id="blank-l" type="number" min="0.5" max="24" step="0.0625" aria-label="Length" value="3">
+            <span>×</span>
+            <input id="blank-w" type="number" min="0.5" max="24" step="0.0625" aria-label="Width" value="1.5">
+            <span>×</span>
+            <input id="blank-h" type="number" min="0.5" max="24" step="0.0625" aria-label="Height" value="1.5">
+          </div>
+        </div>
+        <label class="control">
+          <span class="control-label">Design</span>
+          <select id="design-select" aria-label="Design"></select>
+        </label>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <section class="card" id="blank-card"></section>
+        <ol class="stages" id="stages"></ol>
+        <section class="card" id="grain-card"></section>
+      </aside>
+
+      <section class="stage-view">
+        <div class="viewer-wrap">
+          <div id="viewer"></div>
+          <div class="viewer-top">
+            <div class="segmented small" id="mode" role="radiogroup" aria-label="View">
+              <button data-mode="cut" aria-pressed="true">What to remove</button>
+              <button data-mode="result" aria-pressed="false">After this step</button>
+            </div>
+            <div class="segmented small" id="cams" aria-label="Camera">
+              <button data-cam="iso">3/4</button>
+              <button data-cam="front">Front</button>
+              <button data-cam="side">Side</button>
+              <button data-cam="top">Top</button>
+            </div>
+          </div>
+          <div class="viewer-bottom">
+            <div class="legend" id="legend"></div>
+            <label class="pill-check"><input type="checkbox" id="show-lines" checked> Pencil lines</label>
+          </div>
+          <div class="loading" id="loading" hidden>Planning…</div>
+        </div>
+        <article class="card stage-detail" id="detail"></article>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="/static/app.js"></script>
+</body>
+</html>
