@@ -179,6 +179,10 @@ async function renderDrawer() {
     </div>
     <h2 id="d-name">${escapeHtml(d.name)}</h2>
     <p>${escapeHtml(d.blurb)}</p>
+    <p class="card-label" style="margin-top:6px">Cuts you'll use</p>
+    <ul class="drawer-cuts">${d.cuts
+      .map((c) => `<li><a href="/learn#${c.key}">${escapeHtml(c.name)}</a> <span class="where">${escapeHtml(c.where)}</span></li>`)
+      .join("")}</ul>
     <p class="card-label" style="margin-top:6px">Pick a block</p>
     <ul class="fit-list">${Object.keys(state.blocks)
       .map((b) => {

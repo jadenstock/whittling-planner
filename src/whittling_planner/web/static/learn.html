@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learn the Cuts</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <!-- arrowheads for the sketches -->
+  <svg width="0" height="0" aria-hidden="true" style="position: absolute">
+    <defs>
+      <marker id="arrow-ok" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse">
+        <path class="arrowhead-ok" d="M0,0L10,5L0,10Z"/>
+      </marker>
+      <marker id="arrow-bad" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse">
+        <path class="arrowhead-bad" d="M0,0L10,5L0,10Z"/>
+      </marker>
+    </defs>
+  </svg>
+
+  <header class="topbar">
+    <div class="brand">
+      <h1>Whittling Planner</h1>
+      <nav class="tabs" aria-label="Pages">
+        <a href="/">Plan</a>
+        <a href="/explore">Explore designs</a>
+        <a href="/learn" aria-current="page">Learn</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="learn">
+    <nav class="toc" aria-label="On this page">
+      <a href="#uses">Which cut for what</a>
+      <a href="#cuts">The cuts</a>
+      <a href="#grain">Reading the grain</a>
+      <a href="#hard">What makes a design hard</a>
+      <a href="#path">A practice order</a>
+      <a href="#knives">A better knife</a>
+      <a href="#sharp">Keeping it sharp</a>
+      <a href="#safety">Safety</a>
+      <a href="#trouble">When something goes wrong</a>
+    </nav>
+
+    <div class="learn-body">
+      <section id="uses">
+        <h2>Which cut for what</h2>
+        <p class="lede">A handful of cuts covers nearly everything in whittling. Find what you're trying to do,
+          then read the cut.</p>
+        <table class="uses" id="uses-table"></table>
+      </section>
+
+      <section id="cuts">
+        <h2>The cuts</h2>
+        <p class="lede">From the first to learn to the last. <span class="chip how-Easy">Easy</span> cuts work
+          on day one. <span class="chip how-Takes-practice">Takes practice</span> cuts need a few tries.
+          <span class="chip how-Tricky">Tricky</span> ones fight the grain partway through.</p>
+        <div class="cut-grid" id="cut-grid"></div>
+      </section>
+
+      <section id="grain">
+        <h2>Reading the grain</h2>
+        <p class="lede">Wood is a bundle of fibers running along the grain, like a bundle of drinking straws.
+          Carving blocks have the grain along their longest side, and the planner tells you which way it runs in
+          your block. Most of what feels hard about a cut is the grain.</p>
+        <div class="topic">
+          <figure class="topic-fig" data-diagram="downhill"></figure>
+          <div>
+            <h3>Cut downhill</h3>
+            <p>On a curve, cut from the high point down toward the low point. The blade then slices across fiber
+              ends as they run out of the surface, and the shaving comes off clean.</p>
+            <p>Cut the other way (uphill) and the blade follows fibers that dive into the wood. It digs in, and the
+              wood tears or splits ahead of it. <b>If the wood tears, turn the piece around</b> and come from the
+              other side.</p>
+          </div>
+        </div>
+        <div class="topic">
+          <figure class="topic-fig" data-diagram="shortgrain"></figure>
+          <div>
+            <h3>Short grain</h3>
+            <p>Where a thin part runs across the grain, its fibers are short and nothing holds them together: an
+              ear, a bill, the rim of a cap. It snaps off along the grain. The planner's grain check highlights
+              these spots.</p>
+            <p>Leave short-grain parts thick until last, support them with a finger while you cut, and cut toward
+              the body rather than away from it.</p>
+          </div>
+        </div>
+        <div class="topic">
+          <figure class="topic-fig" data-diagram="endgrain"></figure>
+          <div>
+            <h3>End grain</h3>
+            <p>The ends of the fibers: the top of a figure that stands with the grain up, or the nose and tail of
+              a long one. End grain is hard and crushes instead of slicing.</p>
+            <p>Cut it with a freshly stropped knife, in thin <a href="#push">push cuts</a> that slice across the
+              fibers at an angle.</p>
+          </div>
+        </div>
+        <div class="topic">
+          <figure class="topic-fig" data-diagram="slice"></figure>
+          <div>
+            <h3>Slice, don't push</h3>
+            <p>Draw the blade along its length as it moves forward, the way you slice bread. A slicing cut takes
+              less force, leaves a smoother surface, and makes the biggest difference in end grain and hollows.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="hard">
+        <h2>What makes a design hard</h2>
+        <p class="lede">The levels in the planner come from these. Beginner designs are outward curves or flat
+          planes with nothing thin. Easy ones add a neck, a hollow or a few gaps. Intermediate ones have thin parts
+          and narrow gaps.</p>
+        <dl class="hard-list">
+          <div>
+            <dt>Thin parts</dt>
+            <dd>Ears, tails, bills and flukes break, especially when they run across the grain.
+              <span class="seen">Sitting cat's ears, whale's flukes, the toadstool's cap.</span></dd>
+          </div>
+          <div>
+            <dt>Gaps and inside corners</dt>
+            <dd>Between legs or between figures there's no room to swing the knife. You need
+              <a href="#stop">stop cuts</a> and <a href="#lever">lever cuts</a>, working from both sides.
+              <span class="seen">Walking bear, dachshund, ducks in a row.</span></dd>
+          </div>
+          <div>
+            <dt>Hollows</dt>
+            <dd>A dished face or the underside of a chin needs <a href="#scoop">scoop cuts</a>, and the grain
+              reverses halfway across every hollow.
+              <span class="seen">The owl's face, under the toadstool's cap.</span></dd>
+          </div>
+          <div>
+            <dt>Undercuts</dt>
+            <dd>Anything that hangs over: an ear that hangs free, a hat brim, a cap. You're reaching underneath,
+              and it's usually short grain too.
+              <span class="seen">Dachshund's ears, gnome's brim, toadstool.</span></dd>
+          </div>
+          <div>
+            <dt>Matching pairs</dt>
+            <dd>Two eyes, two ears and four legs have to match. Redraw the centerline after every step, and work
+              both sides in turn, a few cuts each.</dd>
+          </div>
+          <div>
+            <dt>Big smooth curves</dt>
+            <dd>Every bump and stray facet shows on a smooth surface. Rustic, flat-plane designs are more
+              forgiving, because nothing has to blend.</dd>
+          </div>
+          <div>
+            <dt>Easiest of all</dt>
+            <dd>Chunky shapes that curve outward, with the grain along the longest part.
+              <span class="seen">Penguin, loaf cat, turtle, the rustic designs.</span></dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="path">
+        <h2>A practice order</h2>
+        <p class="lede">Each of these adds something new. <span class="chip new">New</span> marks cuts you
+          haven't needed earlier in the list.</p>
+        <ol class="path" id="path-list"></ol>
+      </section>
+
+      <section id="knives">
+        <h2>A better knife</h2>
+        <div class="two-col">
+          <div>
+            <h3>When it's time</h3>
+            <ul>
+              <li>It won't get sharp, or it loses its edge minutes after stropping.</li>
+              <li>The blade is too long to steer the tip into small details.</li>
+              <li>The handle hurts after half an hour.</li>
+              <li>It folds, and the blade wobbles or could close on your fingers.</li>
+            </ul>
+          </div>
+          <div>
+            <h3>What to look for</h3>
+            <ul>
+              <li><b>Fixed blade.</b> No folding.</li>
+              <li><b>About 1 to 1 1/2 in of blade</b> for figures this size, with a straight edge and a fine
+                point.</li>
+              <li><b>A flat bevel</b> (a "Scandi grind") that lies flat on a strop, so it's easy to keep sharp.</li>
+              <li><b>Carbon steel</b> sharpens easily. Wipe it dry, because it can rust.</li>
+              <li><b>Sold razor-sharp</b>, ready to carve.</li>
+              <li><b>A handle that fills your hand</b>: oval, not round, so it doesn't turn in your grip.</li>
+            </ul>
+          </div>
+        </div>
+        <h3>The kinds of knife</h3>
+        <dl class="knife-list">
+          <div><dt>Bench or cutting knife</dt><dd>About 1 1/2 in of blade. The all-rounder that does most of every
+            carving. Start here.</dd></div>
+          <div><dt>Detail knife</dt><dd>A shorter, pointed blade for eyes, tight corners and lever cuts. A good
+            second knife.</dd></div>
+          <div><dt>Sloyd knife</dt><dd>About 3 in of blade, for roughing out bigger blocks like the 4 × 2 × 2
+            quickly.</dd></div>
+          <div><dt>Hook knife</dt><dd>A curved blade for deep hollows. Mostly for spoons and bowls; small figures
+            rarely need one.</dd></div>
+        </dl>
+        <p>Knives carvers often recommend: Flexcut's cutting knife (KN12) and detail knife (KN13), and the
+          Morakniv 120, a short laminated-steel blade that doesn't cost much. The Mora 106 is its longer cousin,
+          for roughing out. Small makers sell hand-made carving knives at higher prices. Reviewers disagree
+          about some of these, so read a few current reviews before you buy.</p>
+        <p class="note">One good knife and a strop beat a set of six.</p>
+      </section>
+
+      <section id="sharp">
+        <h2>Keeping it sharp</h2>
+        <div class="topic">
+          <figure class="topic-fig" data-diagram="strop"></figure>
+          <div>
+            <p>A sharp knife is the safe one: it needs little force, so it doesn't slip.</p>
+            <ol>
+              <li>Rub honing compound into a leather strop.</li>
+              <li>Lay the bevel flat on the leather and pull the knife <b>backward, spine first</b>, with the edge
+                trailing. Never push it edge first, or it cuts the leather.</li>
+              <li>Ten to twenty strokes on each side.</li>
+            </ol>
+            <p>Strop every 20 to 30 minutes of carving, and whenever cuts start to take more force or the surface
+              looks fuzzy. You only need a sharpening stone when stropping no longer brings the edge back.</p>
+            <p><b>Test it:</b> a sharp knife slices paper cleanly and leaves a shiny cut on end grain. A dull one
+              crushes the wood and leaves white fuzz.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="safety">
+        <h2>Safety</h2>
+        <ul class="safety">
+          <li>Before each cut, ask where the blade goes if it slips, and keep every part of you out of that
+            path.</li>
+          <li>Wear a cut-resistant glove on the hand that holds the wood, and a thumb guard or a wrap of tape on
+            your knife hand's thumb for pull cuts.</li>
+          <li>Sit down, brace your elbows against your body or knees, and use short strokes.</li>
+          <li>Rest when your hands get tired. Most slips come from forcing a dull knife.</li>
+          <li>Never try to catch a falling knife. Let it drop.</li>
+          <li>Keep a few bandages nearby.</li>
+        </ul>
+      </section>
+
+      <section id="trouble">
+        <h2>When something goes wrong</h2>
+        <table class="trouble">
+          <thead><tr><th>What happened</th><th>Why</th><th>What to do</th></tr></thead>
+          <tbody>
+            <tr><td>The wood tears or splits ahead of the blade</td><td>You're cutting uphill, against the
+              grain</td><td>Turn the piece around and cut from the other end. See <a href="#grain">cut
+              downhill</a>.</td></tr>
+            <tr><td>The surface is fuzzy, whitish or crushed</td><td>The knife is dull</td><td>Strop it, and slice
+              instead of pushing straight.</td></tr>
+            <tr><td>A chunk split off past your line</td><td>The cut ran on along the grain</td><td>Make a
+              <a href="#stop">stop cut</a> on the line first, and take thinner bites.</td></tr>
+            <tr><td>A thin part snapped off</td><td>Short grain</td><td>Glue it back with wood glue or thin
+              superglue and hold it with a rubber band until it sets. Next time, leave it thick until last.</td></tr>
+            <tr><td>Your hand or forearm aches</td><td>Bites too deep, a dull knife, or a tight grip</td><td>Strop,
+              take thinner shavings, and relax your grip between cuts.</td></tr>
+            <tr><td>The two sides don't match</td><td>The centerline got carved away</td><td>Redraw it after every
+              step, and work both sides in turn.</td></tr>
+            <tr><td>You can't reach into a corner</td><td>The blade is too long for the gap</td><td>Use
+              <a href="#lever">lever cuts</a> with the tip, from both sides. A detail knife helps.</td></tr>
+            <tr><td>You cut too deep</td><td>It happens</td><td>Wood can't go back on. Lower the area around it so
+              it blends, or let the design change a little.</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+
+  <script type="module" src="/static/learn.js"></script>
+</body>
+</html>

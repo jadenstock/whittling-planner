@@ -58,6 +58,8 @@ class Design:
     # spots to measure for the finishing touches, in design coordinates;
     # a spot with y > 0 is one of a mirrored pair, like the eyes
     spots: tuple[tuple[str, tuple[float, float, float]], ...] = field(default=())
+    # the cuts the detail stage calls for, and where: (cut key from learn.CUTS, where)
+    cuts: tuple[tuple[str, str], ...] = ()
 
 
 def flat_base(d, z):
@@ -460,6 +462,11 @@ DESIGNS: dict[str, Design] = {
             (EYES, "Wings: outline each wing with a shallow V-cut, sweeping from the shoulder back to the tail.",
              "Bill: a light cut where the bill meets the head."),
             (("eyes", (0.56, 0.24, 1.62)),),
+            cuts=(
+                ("stop", "where the neck meets the back and the chest, and under the bill"),
+                ("scoop", "the curve of the neck, front and back"),
+                ("push", "the end-grain tip of the bill"),
+            ),
         ),
         Design(
             "duck-decoy", "Duck", "Decoy", "Classic", "Easy", LONG, "x",
@@ -469,6 +476,11 @@ DESIGNS: dict[str, Design] = {
             (EYES, "Wings: a V-cut along each side marks the folded wing.",
              "Paint: decoys look right painted, with a dark head and a light breast."),
             (("eyes", (0.62, 0.15, 0.82)),),
+            cuts=(
+                ("stop", "where the head meets the back, and under the bill"),
+                ("scoop", "the dip of the neck behind the head"),
+                ("pull", "rounding the long body"),
+            ),
         ),
         Design(
             "duck-rustic", "Duck", "Rustic duck", "Rustic", "Beginner", LONG, "x",
@@ -477,6 +489,10 @@ DESIGNS: dict[str, Design] = {
             rustic_duck,
             (FACETS, "Eyes: a small triangle chip cut on each side of the head."),
             (("eyes", (0.56, 0.12, 0.85)),),
+            cuts=(
+                ("facet", "every surface: one flat cut each"),
+                ("stop", "where the head meets the back"),
+            ),
         ),
         Design(
             "ducks-row", "Duck", "Ducks in a row", "Classic", "Easy", ("4x1x1",), "x",
@@ -486,6 +502,11 @@ DESIGNS: dict[str, Design] = {
             ("Gaps: work the gaps between the ducks from both sides, with stop cuts, so the base doesn't split.",
              "Water: a few long, shallow gouge or V-cuts along the base suggest ripples.", EYES),
             (("mother's eyes", (1.55, 0.14, 0.88)),),
+            cuts=(
+                ("stop", "both sides of each gap between the ducks"),
+                ("lever", "cleaning out the narrow gaps with the knife tip"),
+                ("scoop", "around each neck"),
+            ),
         ),
         Design(
             "cat-sitting", "Cat", "Sitting cat", "Classic", "Intermediate", TALL, "z",
@@ -495,6 +516,11 @@ DESIGNS: dict[str, Design] = {
             (EYES, "Face: a small V-cut for the mouth and two shallow lines for the nose.",
              "Ears: hollow the front of each ear slightly with the knife tip."),
             (("eyes", (0.29, 0.12, 1.48)),),
+            cuts=(
+                ("stop", "under the chin, between the front legs, and where the tail meets the body"),
+                ("lever", "the ears, a little at a time from both sides"),
+                ("vcut", "the line between the front legs"),
+            ),
         ),
         Design(
             "cat-rustic", "Cat", "Rustic cat", "Rustic", "Beginner", TALL, "z",
@@ -503,6 +529,10 @@ DESIGNS: dict[str, Design] = {
             rustic_cat,
             (FACETS, "Eyes: two small triangle chips.", "Whiskers: three light knife lines each side of the muzzle."),
             (("eyes", (0.31, 0.12, 1.52)),),
+            cuts=(
+                ("facet", "the planes of the body and head"),
+                ("stop", "the top edge of the tail band, and the notch between the ears"),
+            ),
         ),
         Design(
             "cat-loaf", "Cat", "Loaf cat", "Classic", "Beginner", LONG, "x",
@@ -511,6 +541,11 @@ DESIGNS: dict[str, Design] = {
             loaf_cat,
             (EYES, "Face: a small V-cut for the mouth and nose.", "Fur: optional short knife strokes along the back."),
             (("eyes", (0.74, 0.14, 0.66)),),
+            cuts=(
+                ("stop", "around the head, where it meets the body"),
+                ("pull", "rounding the loaf"),
+                ("lever", "the ears"),
+            ),
         ),
         Design(
             "cat-sleeping", "Cat", "Sleeping cat", "Classic", "Easy", ("2x2x1",), "xy",
@@ -520,6 +555,11 @@ DESIGNS: dict[str, Design] = {
             ("Closed eyes: two short curved knife lines.",
              "Fur: long, flowing knife strokes following the curl of the body."),
             (("head", (0.62, 0.36, 0.70)),),
+            cuts=(
+                ("stop", "along the tail where it lies on the body, and around the head"),
+                ("pull", "rounding the curled body"),
+                ("lever", "the ears"),
+            ),
         ),
         Design(
             "bear-standing", "Bear", "Standing bear", "Classic", "Easy", TALL, "z",
@@ -529,6 +569,11 @@ DESIGNS: dict[str, Design] = {
             (EYES, "Fur: short knife strokes or small gouge cuts over the body, following the shape.",
              "Claws: three tiny V-cuts on each foot."),
             (("eyes", (0.22, 0.10, 1.65)),),
+            cuts=(
+                ("stop", "under the arms, between the legs and under the muzzle"),
+                ("scoop", "the hollow between the legs"),
+                ("lever", "around the ears and the muzzle"),
+            ),
         ),
         Design(
             "bear-walking", "Bear", "Walking bear", "Classic", "Intermediate", LONG, "x",
@@ -537,6 +582,11 @@ DESIGNS: dict[str, Design] = {
             walking_bear,
             (EYES, "Fur: short strokes along the back and the hump.", "Claws: small V-cuts on each foot."),
             (("eyes", (0.82, 0.10, 0.66)),),
+            cuts=(
+                ("stop", "the inside corners between the legs and the belly, and under the chin"),
+                ("scoop", "under the belly, from both ends toward the middle"),
+                ("lever", "between the legs, and the ears"),
+            ),
         ),
         Design(
             "bear-rustic", "Bear", "Rustic bear", "Rustic", "Easy", LONG, "x",
@@ -545,6 +595,10 @@ DESIGNS: dict[str, Design] = {
             rustic_bear,
             (FACETS, "Eyes: two small triangle chips.", "Nose: blacken the tip of the snout with a marker or paint."),
             (("eyes", (0.74, 0.12, 0.72)),),
+            cuts=(
+                ("stop", "the gap under the belly and the slots between the legs: a stop cut at each leg, then slice out between them"),
+                ("facet", "the planes of the head and body"),
+            ),
         ),
         Design(
             "gnome", "Gnome", "Gnome", "Rustic", "Beginner", ("4x1x1",), "z",
@@ -553,6 +607,11 @@ DESIGNS: dict[str, Design] = {
             gnome,
             (FACETS, "Beard: long V-cuts down the beard.", "Paint: a red hat and a dot of pink on the nose."),
             (("nose", (0.46, 0.0, 1.86)),),
+            cuts=(
+                ("stop", "under the hat brim and around the nose"),
+                ("facet", "the hat and the robe"),
+                ("push", "rounding the end of the nose"),
+            ),
         ),
         Design(
             "penguin", "Penguin", "Penguin", "Classic", "Beginner", TALL, "z",
@@ -561,6 +620,11 @@ DESIGNS: dict[str, Design] = {
             penguin,
             (EYES, "Paint: black back and head, white front, orange beak and feet."),
             (("eyes", (0.22, 0.15, 1.70)),),
+            cuts=(
+                ("pull", "rounding the body, from the top down"),
+                ("push", "the beak, and the end grain on top of the head"),
+                ("stop", "under the beak, and along the flippers and feet"),
+            ),
         ),
         Design(
             "owl", "Owl", "Owl", "Classic", "Easy", TALL, "z",
@@ -570,6 +634,11 @@ DESIGNS: dict[str, Design] = {
             ("Eyes: big round eyes in the middle of each dish: an eye punch, or a circle cut with the knife tip.",
              "Feathers: small scalloped cuts on the chest, and long V-cuts along the wings."),
             (("eyes", (0.36, 0.16, 1.46)),),
+            cuts=(
+                ("scoop", "the two dished eye hollows, each from its rim toward the middle"),
+                ("stop", "around the edge of the face and under the beak"),
+                ("lever", "between the ear tufts"),
+            ),
         ),
         Design(
             "mushroom", "Mushroom", "Toadstool", "Classic", "Beginner", TALL, "z",
@@ -578,6 +647,11 @@ DESIGNS: dict[str, Design] = {
             mushroom,
             ("Gills: fine knife lines under each cap, running out from the stem.",
              "Paint: red caps with white dots make a classic fly agaric."),
+            cuts=(
+                ("stop", "under each cap where it meets the stem, and between the two mushrooms"),
+                ("scoop", "the underside of each cap"),
+                ("pull", "rounding the caps"),
+            ),
         ),
         Design(
             "whale", "Whale", "Whale", "Classic", "Beginner", LONG, "x",
@@ -586,6 +660,11 @@ DESIGNS: dict[str, Design] = {
             whale,
             (EYES, "Mouth: one long, shallow V-cut from the snout back toward each eye."),
             (("eyes", (0.62, 0.30, 0.30)),),
+            cuts=(
+                ("pull", "the long, smooth body"),
+                ("stop", "under the tail stock and along the flippers"),
+                ("scoop", "the dip of the back up into the tail"),
+            ),
         ),
         Design(
             "turtle", "Turtle", "Turtle", "Classic", "Beginner", ("2x2x1",), "xy",
@@ -594,6 +673,11 @@ DESIGNS: dict[str, Design] = {
             turtle,
             ("Shell: lay out hexagons on the shell with a pencil, then V-cut the lines.", EYES),
             (("eyes", (0.92, 0.10, 0.33)),),
+            cuts=(
+                ("stop", "under the edge of the shell, around the legs and the neck"),
+                ("pull", "doming the shell"),
+                ("push", "rounding the head and the stubby legs"),
+            ),
         ),
         Design(
             "frog", "Frog", "Frog", "Classic", "Easy", ("2x2x1",), "xy",
@@ -603,6 +687,11 @@ DESIGNS: dict[str, Design] = {
             ("Mouth: one long V-cut around the front of the head, from cheek to cheek.",
              "Eyes: a pupil in each eye bump with an eye punch or the knife tip."),
             (("eyes", (0.52, 0.32, 0.88)),),
+            cuts=(
+                ("stop", "where the legs meet the body, and under the chin"),
+                ("scoop", "the dips around the eye bumps"),
+                ("push", "rounding the eye bumps"),
+            ),
         ),
         Design(
             "dachshund", "Dog", "Dachshund", "Classic", "Intermediate", ("4x1x1",), "x",
@@ -611,6 +700,11 @@ DESIGNS: dict[str, Design] = {
             dachshund,
             (EYES, "Ears: undercut the bottom edge of each ear so it hangs free of the head."),
             (("eyes", (1.56, 0.12, 0.86)),),
+            cuts=(
+                ("stop", "between the legs, under the chin, and along the bottom of each ear"),
+                ("lever", "cleaning out between the legs with the knife tip"),
+                ("scoop", "under the belly, from both ends toward the middle"),
+            ),
         ),
     ]
 }

@@ -1,6 +1,7 @@
 """Terminal entry point.
 
     whittling-planner designs
+    whittling-planner cuts
     whittling-planner plan duck-decoy --block 2x1x1
     whittling-planner plan gnome --block 3x1.5x1.5 --straight
 """
@@ -9,6 +10,7 @@ import argparse
 
 from whittling_planner.designs import BLOCKS, DESIGNS
 from whittling_planner.grain import AXIS_WORDS
+from whittling_planner.learn import CUTS, USES
 from whittling_planner.plan import compute, to_json
 
 
@@ -17,6 +19,7 @@ def main() -> None:
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     sub.add_parser("designs", help="list the built-in designs")
+    sub.add_parser("cuts", help="the knife cuts, and what each is good for")
 
     p_plan = sub.add_parser("plan", help="print a staged carving plan, with the measurements to mark out")
     p_plan.add_argument("design", choices=list(DESIGNS))
@@ -29,6 +32,8 @@ def main() -> None:
     if args.cmd == "designs":
         for d in DESIGNS.values():
             print(f"{d.key:14s} {d.name:16s} {d.level:13s} {d.style:8s} made for {', '.join(d.blocks)}")
+    elif args.cmd == "cuts":
+        print_cuts()
     elif args.cmd == "plan":
         print_plan(args)
 
@@ -49,12 +54,26 @@ def print_plan(args) -> None:
         print(f"\n{i}. {s['title']}{removed}")
         for step in s["steps"]:
             print(f"   - {step}")
+        if s["cuts"]:
+            print("   cuts: " + "; ".join(f"{c['name']} ({c['where']})" if c["where"] else c["name"] for c in s["cuts"]))
         for m in s["marks"]:
             print(f"\n   {m['title']}: {m['station_head'].lower()} → {m['across_head'].lower()} (inches)")
             for row in m["rows"]:
                 print(f"     {row['at']:>16s}   {row['marks']}")
             for tip in m["tips"]:
                 print(f"     point {tip['label']}: {tip['text']}")
+
+
+def print_cuts() -> None:
+    print("Which cut for what:")
+    for want, keys in USES:
+        print(f"  {want:56s} {', '.join(CUTS[k].name for k in keys)}")
+    for c in CUTS.values():
+        print(f"\n{c.name} [{c.level}], also called {c.aka}\n  {c.good_for}")
+        for i, step in enumerate(c.how, 1):
+            print(f"  {i}. {step}")
+        for note in c.watch:
+            print(f"  ! {note}")
 
 
 if __name__ == "__main__":

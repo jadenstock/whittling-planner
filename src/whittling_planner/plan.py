@@ -12,6 +12,7 @@ from skimage.measure import marching_cubes
 from whittling_planner import grain as grain_check
 from whittling_planner.designs import DESIGNS, shape
 from whittling_planner.geometry import Grid, box_field, diagonal_extrusion, extrude, make_grid, sample, silhouette
+from whittling_planner.learn import PROFILE_CUTS, ROUND_CUTS, RUSTIC_ROUND_CUTS, cut_json, cuts_in
 from whittling_planner.marks import FaceMarks, centerline, face_marks, spacing, station_axis, station_lines
 from whittling_planner.placement import Fit, describe, fit_design, turn_words
 from whittling_planner.units import dims_in, dims_mm, inches
@@ -44,6 +45,7 @@ class Stage:
     marks: list[FaceMarks] = field(default_factory=list)
     lines: list = field(default_factory=list)  # pencil lines to draw on the block, as 3D segments
     spots: list = field(default_factory=list)  # points to mark for the finishing touches, world mm
+    cuts: list = field(default_factory=list)  # (cut key, where) for the cuts this step calls for
     same_as: int | None = None  # the shape doesn't change in this stage
 
 
@@ -155,10 +157,12 @@ def compute(key: str, block_mm, detail: int = DEFAULT_DETAIL, grain: str | None 
             steps.append("Where earlier cuts took away the station lines, redraw them first, measuring the same way.")
         steps += [
             cut,
+            "Take the waste off with straightaway cuts in shallow bites, stopping about 1/16 in from the line, "
+            "then finish down to the line with push cuts.",
             "At inside corners, make a stop cut straight in on the line first, then slice toward it, "
             "so the waste pops out without splitting past the line.",
         ]
-        stages.append(Stage(key_, title, summary, steps, f, marks=[marks]))
+        stages.append(Stage(key_, title, summary, steps, f, marks=[marks], cuts=list(PROFILE_CUTS)))
 
     rustic = design.style == "Rustic"
     stages += [
@@ -168,23 +172,26 @@ def compute(key: str, block_mm, detail: int = DEFAULT_DETAIL, grain: str | None 
             [
                 "The profile cuts leave square edges everywhere. Take them down until the piece matches the "
                 "model: this is the shape the figure has when seen from every 45° angle.",
-                "Work in thin slices and keep turning the piece to compare it with the model. The color shows "
+                "Work in thin pull cuts and push cuts, and keep turning the piece to compare it with the model. "
+                "The color shows "
                 "how much to remove: yellow is a shaving, red is the deepest cut in this step.",
                 "Cut downhill with the grain: on each curve, slice from the high point toward the low point, "
                 "so the knife doesn't dig in and split the wood.",
             ] + (["Make each cut one flat plane. On a rustic carving the corners become facets, not curves."] if rustic else []),
             rounded,
+            cuts=list(RUSTIC_ROUND_CUTS if rustic else ROUND_CUTS),
         ),
         Stage(
             "detail", "Carve the details",
             "Carve what no outline can show.",
             [
                 f"Carve the parts that no outline can show: {design.details}.",
-                "Go slowly here. These are small cuts in tight spots, so use the tip of the knife "
-                "and take off very little at a time.",
+                "Go slowly here. These are small cuts in tight spots: use the tip of the knife, lever cuts "
+                "where there's no room for a full stroke, and take off very little at a time.",
                 "Keep every cut flat and crisp." if rustic else "Blend the surfaces with light, smoothing cuts.",
             ],
             target,
+            cuts=list(design.cuts),
         ),
     ]
     spot_steps, spots = _spot_steps(fit)
@@ -197,7 +204,7 @@ def compute(key: str, block_mm, detail: int = DEFAULT_DETAIL, grain: str | None 
         ["Clean up: shave off fuzzy fibers and torn grain with light slicing cuts, especially in the hollows."]
         + spot_steps + list(design.touches)
         + ["Sign and date the base.", finish],
-        target, spots=spots, same_as=len(stages) - 1,
+        target, spots=spots, same_as=len(stages) - 1, cuts=cuts_in(design.touches),
     ))
     return Plan(fit, grid, stages, {**checked, "selected": selected}, tuple(block_mm))
 
@@ -222,7 +229,7 @@ def to_json(plan: Plan) -> dict:
     prev = None
     for i, s in enumerate(plan.stages):
         out = {"key": s.key, "title": s.title, "summary": s.summary, "steps": s.steps,
-               "marks": [m.as_json() for m in s.marks]}
+               "marks": [m.as_json() for m in s.marks], "cuts": [cut_json(k, where) for k, where in s.cuts]}
         if s.lines:
             out["lines"] = _b64(np.array(s.lines, dtype=np.float32).reshape(-1))
         if s.spots:

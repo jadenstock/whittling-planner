@@ -14,6 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from skimage.measure import marching_cubes
 
 from whittling_planner.designs import BLOCKS, DESIGNS, shape
+from whittling_planner.learn import cut_json, design_cuts, learn_json
 from whittling_planner.placement import describe, fit_design
 from whittling_planner.plan import DEFAULT_DETAIL, plan_json
 from whittling_planner.units import dims_in
@@ -37,7 +38,7 @@ async def revalidate_static(request, call_next):
     """Make browsers re-check the pages and static files on every load, so
     edits show up without a hard refresh."""
     response = await call_next(request)
-    if request.url.path in ("/", "/explore") or request.url.path.startswith("/static"):
+    if request.url.path in ("/", "/explore", "/learn") or request.url.path.startswith("/static"):
         response.headers["Cache-Control"] = "no-cache"
     return response
 
@@ -50,6 +51,11 @@ def index() -> FileResponse:
 @app.get("/explore")
 def explore() -> FileResponse:
     return FileResponse(STATIC_DIR / "explore.html")
+
+
+@app.get("/learn")
+def learn() -> FileResponse:
+    return FileResponse(STATIC_DIR / "learn.html")
 
 
 def _b64(a: np.ndarray) -> str:
@@ -77,6 +83,7 @@ def catalog() -> list[dict]:
         out.append({
             "key": d.key, "subject": d.subject, "name": d.name, "style": d.style, "level": d.level,
             "blurb": d.blurb, "blocks": list(d.blocks), "fits": fits,
+            "cuts": [cut_json(k, where) for k, where in design_cuts(d)],
         })
     return out
 
@@ -84,6 +91,12 @@ def catalog() -> list[dict]:
 @app.get("/api/designs")
 def designs() -> dict:
     return {"blocks": {k: list(v) for k, v in BLOCKS.items()}, "designs": catalog()}
+
+
+@app.get("/api/learn")
+def learn_data() -> dict:
+    """The cuts, what each is for, and which designs practice them."""
+    return learn_json()
 
 
 @lru_cache(maxsize=None)

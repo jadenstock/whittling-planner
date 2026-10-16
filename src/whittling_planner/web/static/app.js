@@ -283,7 +283,14 @@ function renderDetail() {
     <p class="card-label">Step ${stage + 1} of ${plan.stages.length}</p>
     <h2>${escapeHtml(s.title)}</h2>
     <p class="summary">${escapeHtml(s.summary)}</p>
-    <ol>${s.steps.map((t) => `<li>${escapeHtml(t)}</li>`).join("")}</ol>
+    <ol>${s.steps.map((t) => `<li>${linkTerms(escapeHtml(t))}</li>`).join("")}</ol>
+    ${s.cuts.length ? `<section class="step-cuts">
+        <p class="card-label">Cuts for this step</p>
+        <ul>${s.cuts.map((c) => `<li>
+          <a href="/learn#${c.key}" target="learn">${escapeHtml(c.name)}</a>
+          <span class="where">${escapeHtml(c.where || c.good_for)}</span>
+        </li>`).join("")}</ul>
+      </section>` : ""}
     ${s.removed_cm3 != null ? `<div class="stats">
         <span>Wood removed <b>${s.removed_cm3.toFixed(1)} cm³</b> (${pct(s.removed_pct)} of the block)</span>
         <span>Deepest cut <b>${inchesFromMm(s.heat_max)}</b> (${s.heat_max.toFixed(1)} mm)</span>
@@ -514,9 +521,24 @@ function inchesFromMm(mm) {
   return `${whole ? whole : ""}${whole && num ? " " : ""}${num ? `${num}/${den}` : ""} in`;
 }
 
+// ---------------------------------------------------------------- links to the Learn page
+
+let linkTerms = (html) => html;
+
+/** Turn the names of cuts and grain ideas in escaped step text into links to the Learn page. */
+function makeLinker(terms) {
+  const re = new RegExp(terms.map((t) => `(${t.pattern})`).join("|"), "gi");
+  return (html) =>
+    html.replace(re, (match, ...groups) => {
+      const i = groups.findIndex((g, k) => k < terms.length && g !== undefined);
+      return `<a href="/learn#${terms[i].anchor}" target="learn">${match}</a>`;
+    });
+}
+
 // ---------------------------------------------------------------- start
 
-const catalog = await (await fetch("/api/designs")).json();
+const [catalog, learn] = await Promise.all(["/api/designs", "/api/learn"].map((u) => fetch(u).then((r) => r.json())));
+linkTerms = makeLinker(learn.terms);
 state.blocks = catalog.blocks;
 state.designs = catalog.designs;
 
